@@ -1,0 +1,4 @@
+*~
+*.swp
+py3env
+__pycache__
