@@ -13,7 +13,6 @@
 # FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
 # more details.
 
-from flask import Flask
 from flask import jsonify
 from flask import json
 from flask import request
@@ -21,10 +20,13 @@ from flask import Response
 from utils.globs import config
 
 class Codi() :
+    '''Codi is used to track toolchains and manage Docker images
 
-    flask_app = Flask
+    Args: app (Flask): Instance of a Flask application
+    '''
 
     def __init__(self, app):
+        '''Initialize Codi with a flask app instance variable'''
         self.flask_app = app
 
     def api_list(self):
