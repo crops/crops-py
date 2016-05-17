@@ -29,7 +29,7 @@ class Codi() :
         '''Initialize Codi with a flask app instance variable'''
         self.flask_app = app
 
-    def api_list(self):
+    def list_api(self):
         '''Show CODI API
         args: None
         returns: List of all registered routes in JSON format
@@ -59,9 +59,10 @@ class Codi() :
         json: toolchain json descriptor
         returns: registration status
         '''
-        if request.method == 'GET':
-            pass
-        return 'TODO'
+        if request.method == 'POST':
+            json_data = request.get_json()
+            print(json_data)
+        return 'TODO: Store in database'
 
     def find_image(self):
         '''Search for a toolchain image in Docker repository
