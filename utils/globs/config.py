@@ -21,6 +21,8 @@ CODI_IP="0.0.0.0"
 CODI_PORT=10000
 TURFF_IP="0.0.0.0"
 TURFF_PORT=9999
+JSON_ROOT= "/opt/poky/"
+REG_URL= "http://0.0.0.0:10000/codi/register-toolchain"
 
 def get_all_routes(app):
     d = {}
