@@ -62,6 +62,9 @@ class Codi() :
         if request.method == 'POST':
             json_data = request.get_json()
             print(json_data)
+        else:
+            print("Unable to get JSON data")
+
         return 'TODO: Store in database'
 
     def find_image(self):
