@@ -31,6 +31,6 @@ if __name__ == '__main__':
                 response.status_code = 400
 
             if response.status_code == 200:
-                print("Registration successful")
+                print("Registration successful : " + jfile)
             else:
-                print("Registration failed")
+                print("Registration failed : " + jfile)
