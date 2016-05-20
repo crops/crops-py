@@ -27,7 +27,7 @@ class Turff():
         try:
             with open(j_file) as json_data:
                 return json.load(json_data)
-        except IOError:
+        except (IOError, ValueError) as e:
             return None
 
     def send_registration(self, url, j_data):
