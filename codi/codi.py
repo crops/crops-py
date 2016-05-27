@@ -25,16 +25,17 @@ class Codi() :
     Args: app (Flask): Instance of a Flask application
     '''
 
-    def __init__(self, app):
+    def __init__(self, flask_app, codi_db):
         '''Initialize Codi with a flask app instance variable'''
-        self.flask_app = app
+        self.app = flask_app
+        self.db = codi_db
 
     def list_api(self):
         '''Show CODI API
         args: None
         returns: List of all registered routes in JSON format
         '''
-        return config.get_all_routes(self.flask_app)
+        return config.get_all_routes(self.app)
 
     def get_version(self):
         '''Show CODI version
@@ -45,12 +46,13 @@ class Codi() :
 
     def get_toolchains(self):
         '''List toolchains in CODI database
-        args: None
+        filter: toolchain filter
         returns: List of all known toolchains in JSON format
         '''
         if request.method == 'GET':
-            pass
-        return 'TODO'
+            filter = request.args.get("filter")
+            response = self.db.db_select(config.TOOLCHAINS_TBL, filter)
+        return Response(json.dumps(list(response)),  mimetype='application/json')
 
     def add_toolchain(self):
         '''Add toolchain to the CODI database
@@ -61,11 +63,11 @@ class Codi() :
         '''
         if request.method == 'POST':
             json_data = request.get_json()
-            print(json_data)
+            self.db.db_create()
+            self.db.db_table_create(config.TOOLCHAINS_TBL)
+            self.db.db_insert(config.TOOLCHAINS_TBL, json_data)
         else:
             print("Unable to get JSON data")
-
-        return 'TODO: Store in database'
 
     def find_image(self):
         '''Search for a toolchain image in Docker repository
