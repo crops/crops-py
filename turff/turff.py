@@ -14,6 +14,7 @@
 # more details.
 
 from flask import json
+import hashlib
 import requests
 
 class Turff():
@@ -25,8 +26,17 @@ class Turff():
         returns: JSON object
         '''
         try:
+            #TODO: add ip and port number to json object
+            md5 = hashlib.md5()
             with open(j_file) as json_data:
-                return json.load(json_data)
+                raw_data = json_data.read()
+            md5.update(raw_data.encode('utf-8'))
+            hex_md5 = md5.hexdigest()
+
+            with open(j_file) as json_data:
+                jdata= json.load(json_data)
+            jdata['id'] = hex_md5
+            return jdata
         except (IOError, ValueError) as e:
             return None
 
@@ -37,4 +47,3 @@ class Turff():
         returns: JSON object
         '''
         return requests.post(url, json=j_data)
-
