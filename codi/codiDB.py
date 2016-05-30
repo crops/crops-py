@@ -61,6 +61,11 @@ class CodiDB() :
     def db_update(self):
         pass
 
-    def db_remove(self):
-        pass
+    def db_remove(self, table, id):
+        c = self.__db_connect_()
+        res = None
+        if id is not None:
+            res = r.db(self.db_name).table(table).get(id).delete().run(c)
+        c.close()
+        return res
 

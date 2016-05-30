@@ -65,9 +65,12 @@ class Codi() :
             json_data = request.get_json()
             self.db.db_create()
             self.db.db_table_create(config.TOOLCHAINS_TBL)
+            #duplicate ids will not be inserted
             self.db.db_insert(config.TOOLCHAINS_TBL, json_data)
+            return 'Success'
         else:
             print("Unable to get JSON data")
+            return 'Error'
 
     def find_image(self):
         '''Search for a toolchain image in Docker repository
@@ -110,8 +113,11 @@ class Codi() :
     def remove_toolchain(self):
         '''Remove toolchain from CODI database
         toolchain: toolchain id
-        returns: result of docker remove image operation
+        returns: result of remove toolchain operation
         '''
         if request.method == 'GET':
-            pass
-        return 'TODO'
+            id = request.args.get("id")
+            self.db.db_remove(config.TOOLCHAINS_TBL, id)
+            return "Success"
+        else:
+            return "Error"
