@@ -63,8 +63,6 @@ class Codi() :
         '''
         if request.method == 'POST':
             json_data = request.get_json()
-            self.db.db_create()
-            self.db.db_table_create(config.TOOLCHAINS_TBL)
             #duplicate ids will not be inserted
             self.db.db_insert(config.TOOLCHAINS_TBL, json_data)
             return 'Success'

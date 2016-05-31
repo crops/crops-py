@@ -13,6 +13,7 @@
 # FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
 # more details.
 
+from utils.globs import config
 import rethinkdb as r
 import json
 
@@ -23,6 +24,8 @@ class CodiDB() :
 
     def __init__(self, db_name):
         self.db_name = db_name
+        self.db_create()
+        self.db_table_create(config.TOOLCHAINS_TBL)
 
     def __db_connect_(self):
         return r.connect('localhost', 28015).repl()
