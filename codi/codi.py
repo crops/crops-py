@@ -31,21 +31,21 @@ class Codi() :
         self.db = codi_db
 
     def list_api(self):
-        '''Show CODI API
+        '''Show CODI API [GET]
         args: None
         returns: List of all registered routes in JSON format
         '''
         return config.get_all_routes(self.app)
 
     def get_version(self):
-        '''Show CODI version
+        '''Show CODI version [GET]
         args: None
         returns: TURFF version in JSON format
         '''
         return jsonify(version=config.VERSION)
 
     def get_toolchains(self):
-        '''List toolchains in CODI database
+        '''List toolchains in CODI database [GET]
         filter: toolchain filter
         returns: List of all known toolchains in JSON format
         '''
@@ -55,9 +55,7 @@ class Codi() :
         return Response(json.dumps(list(response)),  mimetype='application/json')
 
     def add_toolchain(self):
-        '''Add toolchain to the CODI database
-        id: toolchain unique id
-        name: toolchain name
+        '''Add toolchain to the CODI database [POST]
         json: toolchain json descriptor
         returns: registration status
         '''
@@ -71,7 +69,7 @@ class Codi() :
             return 'Error'
 
     def find_image(self):
-        '''Search for a toolchain image in Docker repository
+        '''Search for a toolchain image in Docker repository [GET]
         image: image name
         returns: search results in JSON format
         '''
@@ -81,7 +79,7 @@ class Codi() :
             return Response(json.dumps(response),  mimetype='application/json')
 
     def pull_image(self):
-        '''Download a toolchain image from Docker repository
+        '''Download a toolchain image from Docker repository [GET]
         image: repo/image:tag
         returns: result of docker pull operation
         '''
@@ -95,7 +93,7 @@ class Codi() :
                 return "Error: Image not found"
 
     def remove_image(self):
-        '''Remove toolchain image from local store
+        '''Remove toolchain image from local store [GET]
         image: repo/image:tag
         returns: result of docker remove image operation
         '''
@@ -109,8 +107,8 @@ class Codi() :
                 return "Error: Image not found"
 
     def remove_toolchain(self):
-        '''Remove toolchain from CODI database
-        toolchain: toolchain id
+        '''Remove toolchain from CODI database [GET]
+        id: toolchain id
         returns: result of remove toolchain operation
         '''
         if request.method == 'GET':
