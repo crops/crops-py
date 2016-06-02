@@ -62,6 +62,7 @@ class Codi() :
         if request.method == 'POST':
             json_data = request.get_json()
             #duplicate ids will not be inserted
+            json_data["client_ip"] = request.remote_addr
             self.db.db_insert(config.TOOLCHAINS_TBL, json_data)
             return 'Success'
         else:
