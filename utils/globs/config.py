@@ -14,17 +14,15 @@
 # more details.
 
 from flask import json
-from docker import Client
 
 VERSION = 0.1
 CODI_IP = "0.0.0.0"
 CODI_PORT = 10000
-TURFF_IP = "0.0.0.0"
-TURFF_PORT = 9999
 JSON_ROOT = "/opt/poky/.crops/"
 CODI_DB = "codi"
 TOOLCHAINS_TBL = "toolchains"
 REG_URL = "http://0.0.0.0:10000/codi/register-toolchain"
+DOCKER_SOCKET = "unix://var/run/docker.sock"
 
 def get_all_routes(app):
     d = {}
@@ -34,8 +32,3 @@ def get_all_routes(app):
             if doc is not None:
                 d[rule.rule] = doc.replace('\n', '<br/>&nbsp&nbsp') + "<br/>"
     return json.dumps(d)
-
-def docker_connect(base_url='unix://var/run/docker.sock'):
-    cli = Client(base_url)
-    return cli
-

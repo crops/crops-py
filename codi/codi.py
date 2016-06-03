@@ -18,6 +18,7 @@ from flask import json
 from flask import request
 from flask import Response
 from utils.globs import config
+from utils.docker import dcrops
 
 class Codi() :
     '''Codi is used to track toolchains and manage Docker images
@@ -75,8 +76,9 @@ class Codi() :
         returns: search results in JSON format
         '''
         if request.method == 'GET':
-            cli = config.docker_connect()
+            cli = dcrops.docker_connect(config.DOCKER_SOCKET)
             response = cli.search(request.args.get("image"))
+            cli.close()
             return Response(json.dumps(response),  mimetype='application/json')
 
     def pull_image(self):
@@ -85,12 +87,14 @@ class Codi() :
         returns: result of docker pull operation
         '''
         if request.method == 'GET':
-            cli = config.docker_connect()
+            cli = dcrops.docker_connect(config.DOCKER_SOCKET)
             image = request.args.get("image")
             if image is not None:
                 response = cli.pull(image)
+                cli.close()
                 return Response(json.dumps(response),  mimetype='application/json')
             else:
+                cli.close()
                 return "Error: Image not found"
 
     def remove_image(self):
@@ -99,12 +103,14 @@ class Codi() :
         returns: result of docker remove image operation
         '''
         if request.method == 'GET':
-            cli = config.docker_connect()
+            cli = dcrops.docker_connect(config.DOCKER_SOCKET)
             image = request.args.get("image")
             if image is not None:
                 response = cli.remove_image(image)
+                cli.close()
                 return Response(json.dumps(response),  mimetype='application/json')
             else:
+                cli.close()
                 return "Error: Image not found"
 
     def remove_toolchain(self):
