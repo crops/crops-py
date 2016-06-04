@@ -77,9 +77,14 @@ class Codi() :
         '''
         if request.method == 'GET':
             cli = dcrops.docker_connect(config.DOCKER_SOCKET)
-            response = cli.search(request.args.get("image"))
-            cli.close()
-            return Response(json.dumps(response),  mimetype='application/json')
+            image = request.args.get("image")
+            if image is not None:
+                response = cli.search(image)
+                cli.close()
+                return Response(json.dumps(response),  mimetype='application/json')
+            else:
+                cli.close()
+                return "Error: Image not provided"
 
     def pull_image(self):
         '''Download a toolchain image from Docker repository [GET]
@@ -87,15 +92,18 @@ class Codi() :
         returns: result of docker pull operation
         '''
         if request.method == 'GET':
+            temp = ""
             cli = dcrops.docker_connect(config.DOCKER_SOCKET)
             image = request.args.get("image")
             if image is not None:
-                response = cli.pull(image)
+                for response in cli.pull(image, stream=True):
+                    print(response.decode("utf-8"))
+                    temp = temp + response.decode("utf-8")
                 cli.close()
-                return Response(json.dumps(response),  mimetype='application/json')
+                return Response(json.dumps(temp),  mimetype='application/json')
             else:
                 cli.close()
-                return "Error: Image not found"
+                return "Error: Image not provided"
 
     def remove_image(self):
         '''Remove toolchain image from local store [GET]
@@ -111,7 +119,7 @@ class Codi() :
                 return Response(json.dumps(response),  mimetype='application/json')
             else:
                 cli.close()
-                return "Error: Image not found"
+                return "Error: Image not provided"
 
     def remove_toolchain(self):
         '''Remove toolchain from CODI database [GET]

@@ -1,7 +1,7 @@
 """A setuptools based setup module.
 
 See:
-https://github.com/todorez/crops
+https://github.com/crops/crops
 """
 
 from setuptools import setup, find_packages
@@ -22,7 +22,7 @@ setup(
     long_description=long_description,
 
     # The project's main homepage
-    url='https://github.com/todorez/crops',
+    url='https://github.com/crops/crops',
     author='Todor Minchev',
     author_email='todor.minchev@linux.intel.com',
     license='GPLv3',
@@ -52,5 +52,4 @@ setup(
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
     packages=find_packages(exclude=['turff', 'codi']),
-
 )
