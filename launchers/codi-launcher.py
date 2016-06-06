@@ -33,4 +33,5 @@ if __name__ == '__main__':
     db = codiDB.CodiDB(config.CODI_DB)
     codi = codi.Codi(app, db)
     register_codi_routes(app)
-    app.run(host=config.CODI_IP, port=config.CODI_PORT, debug=True)
+    codi_args = codi.get_arg_parser()
+    app.run(host=codi_args.ip, port=codi_args.port, debug=True)

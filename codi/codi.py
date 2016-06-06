@@ -19,6 +19,7 @@ from flask import request
 from flask import Response
 from utils.globs import config
 from utils.docker import dcrops
+import argparse
 
 class Codi() :
     '''Codi is used to track toolchains and manage Docker images
@@ -132,3 +133,15 @@ class Codi() :
             return "Success"
         else:
             return "Error"
+
+    def get_arg_parser(self):
+        '''Create CODI command line argument parser
+        returns: codi arguments
+        '''
+        parser = argparse.ArgumentParser(
+                description='CODI command line arguments')
+        parser.add_argument('--ip', default="0.0.0.0",
+                help='codi ip address (default: 0.0.0.0)')
+        parser.add_argument('--port', default=10000, type=int,
+                help='codi port (default: 10000)')
+        return parser.parse_args()
