@@ -16,12 +16,8 @@
 from flask import json
 
 VERSION = 0.1
-CODI_IP = "0.0.0.0"
-CODI_PORT = 10000
-JSON_ROOT = "/opt/poky/.crops/"
 CODI_DB = "codi"
 TOOLCHAINS_TBL = "toolchains"
-REG_URL = "http://0.0.0.0:10000/codi/register-toolchain"
 DOCKER_SOCKET = "unix://var/run/docker.sock"
 
 def get_all_routes(app):

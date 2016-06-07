@@ -21,12 +21,15 @@ import os
 if __name__ == '__main__':
     response = Response()
     turff = turff.Turff()
+    turff_args = turff.get_arg_parser()
 
-    for jfile in os.listdir(config.JSON_ROOT):
+    for jfile in os.listdir(turff_args.jsonRoot + "/"):
         if jfile.endswith(".json"):
-            jdata = turff.load_json(config.JSON_ROOT + jfile)
+            jdata = turff.load_json(turff_args.jsonRoot + "/" + jfile)
             if jdata is not None:
-                response = turff.send_registration(config.REG_URL, jdata)
+                url = "http://" + turff_args.ip + ":" + \
+                str(turff_args.port) + "/codi/register-toolchain"
+                response = turff.send_registration(url, jdata)
             else:
                 response.status_code = 400
 

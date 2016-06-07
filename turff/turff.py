@@ -16,6 +16,7 @@
 from flask import json
 import hashlib
 import requests
+import argparse
 
 class Turff():
     '''Turff is a toolchain description utility'''
@@ -47,3 +48,17 @@ class Turff():
         returns: JSON object
         '''
         return requests.post(url, json=j_data)
+
+    def get_arg_parser(self):
+        '''Create TURFF command line argument parser
+        returns: turff arguments
+        '''
+        parser = argparse.ArgumentParser(
+                description='TURFF command line arguments')
+        parser.add_argument('--ip', default="0.0.0.0",
+                help='codi ip address (default: 0.0.0.0)')
+        parser.add_argument('--port', default=10000, type=int,
+                help='codi port (default: 10000)')
+        parser.add_argument('--jsonRoot', default="/opt/poky/.crops/",
+                help='root directory for json descriptors (default:/opt/poky/.crops)')
+        return parser.parse_args()
