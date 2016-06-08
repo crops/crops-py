@@ -21,7 +21,7 @@ import argparse
 class Turff():
     '''Turff is a toolchain description utility'''
 
-    def load_json(self, j_file):
+    def load_json(self, j_file, docker_url):
         '''Load JSON toolchain descriptor
         j_file: JSON file name
         returns: JSON object
@@ -37,6 +37,7 @@ class Turff():
             with open(j_file) as json_data:
                 jdata= json.load(json_data)
             jdata['id'] = hex_md5
+            jdata['docker'] = docker_url
             return jdata
         except (IOError, ValueError) as e:
             return None
@@ -61,4 +62,6 @@ class Turff():
                 help='codi port (default: 10000)')
         parser.add_argument('--jsonRoot', default="/opt/poky/.crops/",
                 help='root directory for json descriptors (default:/opt/poky/.crops)')
+        parser.add_argument('--dockerURL', default="unix:///var/run/docker.sock",
+                help='Docker Engine URL (default:unix:///var/run/docker.sock)')
         return parser.parse_args()

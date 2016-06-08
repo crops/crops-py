@@ -25,7 +25,8 @@ if __name__ == '__main__':
 
     for jfile in os.listdir(turff_args.jsonRoot + "/"):
         if jfile.endswith(".json"):
-            jdata = turff.load_json(turff_args.jsonRoot + "/" + jfile)
+            jdata = turff.load_json(turff_args.jsonRoot +
+                    "/" + jfile, turff_args.dockerURL)
             if jdata is not None:
                 url = "http://" + turff_args.ip + ":" + \
                 str(turff_args.port) + "/codi/register-toolchain"
