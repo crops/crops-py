@@ -17,6 +17,27 @@ from flask import json
 import hashlib
 import requests
 import argparse
+import os
+
+def getDefaultIP():
+    '''returns CROPS-CODI linked ip addr or 0.0.0.0 as default'''
+    try:
+        s=os.environ['CROPS_CODI_PORT']
+        ip = s.split(':')[1].replace("/","")
+    except:
+        ip="0.0.0.0"
+
+    return ip
+
+def getDefaultPort():
+    '''returns CROPS-CODI linked port or 10000 as default'''
+    try:
+        s=os.environ['CROPS_CODI_PORT']
+        port = int(s.split(':')[2])
+    except:
+        port=10000
+
+    return port
 
 class Turff():
     '''Turff is a toolchain description utility'''
@@ -56,10 +77,10 @@ class Turff():
         '''
         parser = argparse.ArgumentParser(
                 description='TURFF command line arguments')
-        parser.add_argument('--ip', default="0.0.0.0",
-                help='codi ip address (default: 0.0.0.0)')
-        parser.add_argument('--port', default=10000, type=int,
-                help='codi port (default: 10000)')
+        parser.add_argument('--ip', default=getDefaultIP(),
+                            help='codi ip address (default: %s)'%(getDefaultIP()))
+        parser.add_argument('--port', default=getDefaultPort(), type=int,
+                            help='codi port (default: %s'%(getDefaultPort()))
         parser.add_argument('--jsonRoot', default="/opt/poky/.crops/",
                 help='root directory for json descriptors (default:/opt/poky/.crops)')
         parser.add_argument('--dockerURL', default="unix:///var/run/docker.sock",
