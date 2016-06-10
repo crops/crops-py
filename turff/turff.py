@@ -48,7 +48,6 @@ class Turff():
         returns: JSON object
         '''
         try:
-            #TODO: add ip and port number to json object
             md5 = hashlib.md5()
             with open(j_file) as json_data:
                 raw_data = json_data.read()
@@ -59,6 +58,7 @@ class Turff():
                 jdata= json.load(json_data)
             jdata['id'] = hex_md5
             jdata['docker'] = docker_url
+            jdata['docker_image'] = os.getenv('DOCKER_IMAGE',"")
             return jdata
         except (IOError, ValueError) as e:
             return None
