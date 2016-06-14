@@ -85,4 +85,6 @@ class Turff():
                 help='root directory for json descriptors (default:/opt/poky/.crops)')
         parser.add_argument('--dockerURL', default="unix:///var/run/docker.sock",
                 help='Docker Engine URL (default:unix:///var/run/docker.sock)')
+        parser.add_argument('--retries', default=3, type=int,
+                help='Number of times to retry to register a toolchain (default: 5')
         return parser.parse_args()
