@@ -28,10 +28,7 @@ def register_codi_routes (app):
     app.add_url_rule('/codi/remove-image', 'remove-image', codi.remove_image)
     app.add_url_rule('/codi/remove-toolchain', 'remove_toolchain', codi.remove_toolchain)
 
-if __name__ == '__main__':
-    app = Flask(__name__)
-    db = codiDB.CodiDB(config.CODI_DB)
-    codi = codi.Codi(app, db)
-    register_codi_routes(app)
-    codi_args = codi.get_arg_parser()
-    app.run(host=codi_args.ip, port=codi_args.port, debug=True)
+app = Flask(__name__)
+db = codiDB.CodiDB(config.CODI_DB)
+codi = codi.Codi(app, db)
+register_codi_routes(app)
