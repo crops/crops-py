@@ -66,12 +66,15 @@ class Codi() :
             json_data["client_ip"] = request.remote_addr
             response = self.db.db_insert(config.TOOLCHAINS_TBL, json_data)
             if response is not None:
+                response = Response(json.dumps(list(response)),  mimetype='application/json')
                 response.status_code = 200
             else:
+                response = Response(json.dumps(list(response)),  mimetype='application/json')
                 response.status_code = 400
         else:
+            response = Response(json.dumps(list(response)),  mimetype='application/json')
             response.status_code = 400
-        return Response(json.dumps(list(response)),  mimetype='application/json')
+        return response
 
     def find_image(self):
         '''Search for a toolchain image in Docker repository [GET]
@@ -99,11 +102,9 @@ class Codi() :
             cli = dcrops.docker_connect(config.DOCKER_SOCKET)
             image = request.args.get("image")
             if image is not None:
-                for response in cli.pull(image, stream=True):
-                    print(response.decode("utf-8"))
-                    temp = temp + response.decode("utf-8")
+                cli.pull(image, stream=False)
                 cli.close()
-                return Response(json.dumps(temp),  mimetype='application/json')
+                return Response(json.dumps("Success"),  mimetype='application/json')
             else:
                 cli.close()
                 return "Error: Image not provided"

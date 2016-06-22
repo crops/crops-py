@@ -31,7 +31,6 @@ class CodiDB() :
         create = self.db_create()
         if create is not None:
             if create is False:
-                print("Database exists")
                 if self.db_table_create(config.TOOLCHAINS_TBL) is None:
                     print("Unable to initialize database table.Exiting")
                     if ("gunicorn" in os.environ.get("SERVER_SOFTWARE", "")):
