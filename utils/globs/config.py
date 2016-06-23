@@ -17,6 +17,7 @@ from flask import json
 
 VERSION = 0.1
 CODI_DB = "codi"
+DB_RETRIES = 3
 TOOLCHAINS_TBL = "toolchains"
 DOCKER_SOCKET = "unix://var/run/docker.sock"
 

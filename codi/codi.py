@@ -63,13 +63,15 @@ class Codi() :
         '''
         if request.method == 'POST':
             json_data = request.get_json()
-            #duplicate ids will not be inserted
             json_data["client_ip"] = request.remote_addr
-            self.db.db_insert(config.TOOLCHAINS_TBL, json_data)
-            return 'Success'
+            response = self.db.db_insert(config.TOOLCHAINS_TBL, json_data)
+            if response is not None:
+                response.status_code = 200
+            else:
+                response.status_code = 400
         else:
-            print("Unable to get JSON data")
-            return 'Error'
+            response.status_code = 400
+        return Response(json.dumps(list(response)),  mimetype='application/json')
 
     def find_image(self):
         '''Search for a toolchain image in Docker repository [GET]
@@ -133,3 +135,15 @@ class Codi() :
             return "Success"
         else:
             return "Error"
+
+    def get_arg_parser(self):
+        '''Create CODI command line argument parser
+        returns: codi arguments
+        '''
+        parser = argparse.ArgumentParser(
+            description='CODI command line arguments')
+        parser.add_argument('--ip', default="0.0.0.0",
+            help='codi ip address (default: 0.0.0.0)')
+        parser.add_argument('--port', default=10000, type=int,
+            help='codi port (default: 10000)')
+        return parser.parse_args()

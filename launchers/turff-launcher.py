@@ -39,7 +39,6 @@ def toolchain_reg(turff):
                 return False
     return True
 
-
 if __name__ == '__main__':
     turff = turff.Turff()
     retries = turff.get_arg_parser().retries
