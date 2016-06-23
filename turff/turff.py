@@ -14,6 +14,7 @@
 # more details.
 
 from flask import json
+from datetime import datetime
 import hashlib
 import requests
 import argparse
@@ -59,6 +60,7 @@ class Turff():
             jdata['id'] = hex_md5
             jdata['docker'] = docker_url
             jdata['docker_image'] = os.getenv('DOCKER_IMAGE',"")
+            jdata['timestamp'] = json.dumps(datetime.now())
             return jdata
         except (IOError, ValueError) as e:
             return None
