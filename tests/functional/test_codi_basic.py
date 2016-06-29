@@ -16,7 +16,6 @@ class CropsBasicTests(unittest.TestCase):
         self.codiAddr = "127.0.0.1"
         self.codiPort = "10000"
         self.image = "crops/chameleonsocks"
-        codiDB.CodiDB(config.CODI_DB)
 
     def tearDown(self):
         ''' Destroy unique data '''

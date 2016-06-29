@@ -19,6 +19,7 @@ from flask import request
 from flask import Response
 from utils.globs import config
 from utils.docker import dcrops
+from codi import codiDB
 import argparse
 
 class Codi() :
@@ -27,10 +28,10 @@ class Codi() :
     Args: app (Flask): Instance of a Flask application
     '''
 
-    def __init__(self, flask_app, codi_db):
+    def __init__(self, flask_app):
         '''Initialize Codi with a flask app instance variable'''
         self.app = flask_app
-        self.db = codi_db
+        self.db = codiDB.CodiDB(config.CODI_DB)
 
     def list_api(self):
         '''Show CODI API [GET]
