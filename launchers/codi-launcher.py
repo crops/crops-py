@@ -29,9 +29,10 @@ def register_codi_routes (app):
     app.add_url_rule('/codi/remove-image', 'remove-image', codi.remove_image)
     app.add_url_rule('/codi/remove-toolchain', 'remove_toolchain', codi.remove_toolchain)
 
+db = codiDB.CodiDB(config.CODI_DB)
+
 if __name__ == '__main__':
     app = Flask(__name__)
-    db = codiDB.CodiDB(config.CODI_DB)
     codi = codi.Codi(app, db)
     codi_args = codi.get_arg_parser()
     register_codi_routes(app)
@@ -39,6 +40,5 @@ if __name__ == '__main__':
 
 if ("gunicorn" in os.environ.get("SERVER_SOFTWARE", "")):
     app = Flask(__name__)
-    db = codiDB.CodiDB(config.CODI_DB)
     codi = codi.Codi(app, db)
     register_codi_routes(app)
