@@ -24,7 +24,7 @@ class CropsBasicTests(unittest.TestCase):
         ''' Start codi'''
         success=True
         try:
-            p = subprocess.Popen(["gunicorn", "-w", "4", "-t", "180","-b", self.codiAddr + ":" + self.codiPort, "launchers.codi-launcher:app"],stdout=subprocess.PIPE)
+            p = subprocess.Popen(["gunicorn",  "-c", "launchers/gunicorn_config.py","-w", "4", "-t", "180","-b", self.codiAddr + ":" + self.codiPort, "launchers.codi-launcher:app"],stdout=subprocess.PIPE)
             time.sleep(2)
         except subprocess.CalledProcessError as e:
             print(e.output)
