@@ -17,6 +17,7 @@ from flask import Flask
 from codi import codi
 from codi import codiDB
 from utils.globs import config
+import os
 
 def register_codi_routes (app):
     app.add_url_rule('/codi/', 'api_list', codi.list_api)
@@ -30,8 +31,12 @@ def register_codi_routes (app):
 
 if __name__ == '__main__':
     app = Flask(__name__)
-    db = codiDB.CodiDB(config.CODI_DB)
-    codi = codi.Codi(app, db)
-    register_codi_routes(app)
+    codi = codi.Codi(app)
     codi_args = codi.get_arg_parser()
+    register_codi_routes(app)
     app.run(host=codi_args.ip, port=codi_args.port, debug=True)
+
+if ("gunicorn" in os.environ.get("SERVER_SOFTWARE", "")):
+    app = Flask(__name__)
+    codi = codi.Codi(app)
+    register_codi_routes(app)

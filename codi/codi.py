@@ -19,6 +19,7 @@ from flask import request
 from flask import Response
 from utils.globs import config
 from utils.docker import dcrops
+from codi import codiDB
 import argparse
 
 class Codi() :
@@ -27,10 +28,10 @@ class Codi() :
     Args: app (Flask): Instance of a Flask application
     '''
 
-    def __init__(self, flask_app, codi_db):
+    def __init__(self, flask_app):
         '''Initialize Codi with a flask app instance variable'''
         self.app = flask_app
-        self.db = codi_db
+        self.db = codiDB.CodiDB(config.CODI_DB)
 
     def list_api(self):
         '''Show CODI API [GET]
@@ -63,13 +64,18 @@ class Codi() :
         '''
         if request.method == 'POST':
             json_data = request.get_json()
-            #duplicate ids will not be inserted
             json_data["client_ip"] = request.remote_addr
-            self.db.db_insert(config.TOOLCHAINS_TBL, json_data)
-            return 'Success'
+            response = self.db.db_insert(config.TOOLCHAINS_TBL, json_data)
+            if response is not None:
+                response = Response(json.dumps(list(response)),  mimetype='application/json')
+                response.status_code = 200
+            else:
+                response = Response(json.dumps(list(response)),  mimetype='application/json')
+                response.status_code = 400
         else:
-            print("Unable to get JSON data")
-            return 'Error'
+            response = Response(json.dumps(list(response)),  mimetype='application/json')
+            response.status_code = 400
+        return response
 
     def find_image(self):
         '''Search for a toolchain image in Docker repository [GET]
@@ -97,11 +103,9 @@ class Codi() :
             cli = dcrops.docker_connect(config.DOCKER_SOCKET)
             image = request.args.get("image")
             if image is not None:
-                for response in cli.pull(image, stream=True):
-                    print(response.decode("utf-8"))
-                    temp = temp + response.decode("utf-8")
+                cli.pull(image, stream=False)
                 cli.close()
-                return Response(json.dumps(temp),  mimetype='application/json')
+                return Response(json.dumps("Success"),  mimetype='application/json')
             else:
                 cli.close()
                 return "Error: Image not provided"
@@ -139,9 +143,9 @@ class Codi() :
         returns: codi arguments
         '''
         parser = argparse.ArgumentParser(
-                description='CODI command line arguments')
+            description='CODI command line arguments')
         parser.add_argument('--ip', default="0.0.0.0",
-                help='codi ip address (default: 0.0.0.0)')
+            help='codi ip address (default: 0.0.0.0)')
         parser.add_argument('--port', default=10000, type=int,
-                help='codi port (default: 10000)')
+            help='codi port (default: 10000)')
         return parser.parse_args()

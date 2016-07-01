@@ -1,0 +1,46 @@
+language: python
+python:
+  - "3.5"
+
+sudo: required
+services:
+  - docker
+
+env:
+  global:
+    - DOCKER_VERSION=1.10.1-0~trusty
+
+before_install:
+  - apt-cache madison docker-engine
+  - sudo apt-get -o Dpkg::Options::="--force-confnew" install -y -qq docker-engine=${DOCKER_VERSION}
+
+script:
+  # configure crops-py dependencies
+  - pip install -e .
+  - pip install --upgrade pip
+  - pip install flask docker-py rethinkdb gunicorn
+
+  # install & configure database
+  - source /etc/lsb-release
+  - echo "deb http://download.rethinkdb.com/apt $DISTRIB_CODENAME main" | sudo tee /etc/apt/sources.list.d/rethinkdb.list
+  - sudo wget -qO- https://download.rethinkdb.com/apt/pubkey.gpg | sudo apt-key add -
+  - sudo apt-get update -qq
+  - sudo apt-get install -y -qq rethinkdb curl
+  - sudo apt-get remove --purge python2.7 -y -qq
+  - sudo cp /etc/rethinkdb/default.conf.sample /etc/rethinkdb/instances.d/default.conf
+  - sudo /etc/init.d/rethinkdb start
+
+  # install toolchain descriptor
+  - sudo mkdir -p /opt/poky/.crops
+  - wget -q -P /tmp http://crops.github.io/toolchain-json/poky-glibc-x86_64-core-image-sato-i586-toolchain-2.1-json.sh
+  - chmod 755 /tmp/poky-glibc-x86_64-core-image-sato-i586-toolchain-2.1-json.sh
+  - sudo /tmp/poky-glibc-x86_64-core-image-sato-i586-toolchain-2.1-json.sh -d /opt/poky -y
+
+  # run tests
+  - python tests.py
+
+notifications:
+  email:
+    recipients:
+    on_success: change
+    on_failure: always

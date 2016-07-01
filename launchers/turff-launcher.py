@@ -18,11 +18,9 @@ from flask import Response
 from utils.globs import config
 import os
 
-if __name__ == '__main__':
+def toolchain_reg(turff):
     response = Response()
-    turff = turff.Turff()
     turff_args = turff.get_arg_parser()
-
     for jfile in os.listdir(turff_args.jsonRoot + "/"):
         if jfile.endswith(".json"):
             jdata = turff.load_json(turff_args.jsonRoot +
@@ -38,3 +36,13 @@ if __name__ == '__main__':
                 print("Registration successful : " + jfile)
             else:
                 print("Registration failed : " + jfile)
+                return False
+    return True
+
+if __name__ == '__main__':
+    turff = turff.Turff()
+    retries = turff.get_arg_parser().retries
+    success = False
+    while (bool(retries) & (not success)):
+        success=toolchain_reg(turff)
+        retries -= 1

@@ -13,19 +13,10 @@
 # FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
 # more details.
 
-from flask import json
+from codi import codiDB
 
-VERSION = 0.1
-CODI_DB = "codi"
-DB_RETRIES = 3
-TOOLCHAINS_TBL = "toolchains"
-DOCKER_SOCKET = "unix://var/run/docker.sock"
+def db_init(server):
+    codiDB.CodiDB("codi")
 
-def get_all_routes(app):
-    d = {}
-    for rule in app.url_map.iter_rules():
-        if rule.endpoint != 'static':
-            doc = app.view_functions[rule.endpoint].__doc__
-            if doc is not None:
-                d[rule.rule] = doc.replace('\n', '<br/>&nbsp&nbsp') + "<br/>"
-    return json.dumps(d)
+on_starting = db_init
+
